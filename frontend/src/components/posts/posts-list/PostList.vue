@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h1 class="h3 mb-4">My own posts</h1>
+    <div class="d-flex justify-content-between align-items-center">
+      <h1 class="h3 mb-4">My own posts</h1>
+      <b-button to="/post/create" variant="primary">
+        Add post
+      </b-button>
+    </div>
 
     <post-form-search />
 

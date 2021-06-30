@@ -35,6 +35,11 @@ export default new Router({
       component: Posts
     },
     {
+      path: '/post/create',
+      name: 'post-create',
+      component: PostCreate
+    },
+    {
       path: '/post/:id/preview',
       name: 'post-view',
       component: PostView
@@ -43,11 +48,6 @@ export default new Router({
       path: '/post/:id/edit',
       name: 'post-edit',
       component: PostEdit
-    },
-    {
-      path: '/post/create',
-      name: 'post-create',
-      component: PostCreate
-    },
+    }
   ]
 })
