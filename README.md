@@ -12,6 +12,8 @@ You should wait some minutes to run the server `http://localhost:8080`
 **If you don't have a make tools**
 
 - `docker-compose run --rm crud-php-cli composer install`
+- `docker-compose run --rm crud-php-cli cp ./.env.example ./.env`
+- `docker-compose run --rm crud-php-cli php artisan key:generate`
 - `docker-compose run --rm crud-php-cli php artisan storage:link`
 - `docker-compose run --rm crud-php-cli php artisan migrate`
 - `docker-compose run --rm crud-php-cli php artisan passport:install`
