@@ -1,0 +1,94 @@
+version: "3.9"
+
+services:
+  crud-php-cli:
+    build:
+      context: ./backend
+      dockerfile: docker/php-cli/Dockerfile
+    container_name: crud-php-cli
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - crud-pgsql
+      - crud-mailer
+    networks:
+      - crud-test
+
+  crud-php-fpm:
+    build:
+      context: ./backend
+      dockerfile: docker/php-fpm/Dockerfile
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - crud-pgsql
+      - crud-mailer
+    networks:
+      - crud-test
+
+  crud-mailer:
+    image: mailhog/mailhog
+    tty: true
+    restart: on-failure
+    ports:
+      - "8025:8025"
+    networks:
+      - crud-test
+
+  crud-pgsql:
+    image: postgres:13.2-alpine
+    environment:
+      POSTGRES_USER: crud
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: crud
+    container_name: crud-pgsql
+    restart: unless-stopped
+    volumes:
+      - postgres-storage:/var/lib/postgresql/data
+    ports:
+      - "54321:5432"
+    networks:
+      - crud-test
+
+  crud-client:
+    build:
+      context: ./frontend
+      dockerfile: docker/node/Dockerfile
+    restart: unless-stopped
+    container_name: crud-client
+    command: ["npm", "run", "serve"]
+    tty: true
+    stdin_open: true
+    environment:
+      VUE_APP_API_BASE_URL: http://localhost/api
+      VUE_APP_TOKEN_NAME: token
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend:/app
+    networks:
+      - crud-test
+
+  crud-api-nginx:
+    build:
+      context: ./backend
+      dockerfile: docker/nginx/Dockerfile
+    restart: on-failure
+    ports:
+      - "80:80"
+      - "8022:8022"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - crud-php-fpm
+      - crud-php-cli
+      - crud-mailer
+    networks:
+      - crud-test
+
+networks:
+  crud-test:
+    driver: bridge
+
+volumes:
+  postgres-storage:
