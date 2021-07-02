@@ -38,7 +38,7 @@ export default {
     async login({ commit, dispatch }, { email, password }) {
       try {
         commit('startFetching')
-        const { data: { status, message, token } } = await http().post('/login', { email, password })
+        const { data: { status, message, token } } = await http.post('/login', { email, password })
 
         console.log(status, message, token)
 
@@ -68,7 +68,7 @@ export default {
 
       try {
         commit('startFetching')
-        const { data } = await http().get('/user')
+        const { data } = await http.get('/user')
         commit('setUser', data)
       } catch (e) {
         commit('setError', e.message)

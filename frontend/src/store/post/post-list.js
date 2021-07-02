@@ -75,7 +75,7 @@ export default {
         commit('startFetching')
         const {data: {
           current_page, data, per_page, total
-        }} = await http().get(`/post?${queryParams}`)
+        }} = await http.get(`/post?${queryParams}`)
         commit('setCurrentPage', current_page)
         commit('setModels', data)
         commit('setPerPage', per_page)
@@ -118,7 +118,7 @@ export default {
     async remove({ commit }, id) {
       try {
         commit('startFetching')
-        const { data: { status } } = await http().delete(`/post/${id}`)
+        const { data: { status } } = await http.delete(`/post/${id}`)
         if (status !== 'success') {
           throw new Error(`Error delete the post #${id}`)
         }

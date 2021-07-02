@@ -11,9 +11,14 @@ export default {
       state.data = { ...value }
     },
 
+    clearError(state) {
+      state.error = undefined
+    },
+
     startFetching(state) {
       state.loader = true
       state.error = undefined
+      state.data = undefined
     },
 
     stopFetching(state) {
@@ -26,6 +31,8 @@ export default {
   },
   actions: {
     async fetchPost({ state, commit }, id) {
+      commit('clearError')
+
       if (state.loader) {
         return;
       }
@@ -37,7 +44,7 @@ export default {
       try {
         commit('startFetching')
         commit('setError', undefined)
-        const { data } = await http().get(`/post/${id}`)
+        const { data } = await http.get(`/post/${id}`)
         commit('setData', data)
       } catch (e) {
         commit('setError', e.message)

@@ -15,11 +15,13 @@ class LoginController extends Controller
                 $request->get('password')
             );
 
-            return [
+            $token = $user->createToken('personal');
+
+            return response()->json([
                 'status' => 'success',
-                'token' => $user->createToken('personal')->accessToken,
+                'token' => $token->accessToken,
                 'user' => $user->toArray()
-            ];
+            ]);
         } catch (\DomainException $e) {
             return [
                 'status' => 'error',

@@ -1,16 +1,13 @@
 import axios from 'axios'
 
-const headers = { }
+const http = axios.create({
+  baseURL: process.env.VUE_APP_API_BASE_URL ?? '/api',
+})
 
-export default () => {
+http.interceptors.request.use(config => {
   const authToken = localStorage.getItem(process.env.VUE_APP_TOKEN_NAME ?? 'token')
+  config.headers.Authorization = `Bearer ${authToken}`
+  return config
+})
 
-  if (authToken) {
-    headers['Authorization'] = `Bearer ${authToken}`
-  }
-
-  return axios.create({
-    baseURL: process.env.VUE_APP_API_BASE_URL ?? '/api',
-    headers
-  })
-}
+export default http

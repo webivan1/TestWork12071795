@@ -34,7 +34,7 @@ export default {
     async create({ commit }, form) {
       try {
         commit('startFetching')
-        const { data: { status, post, error } } = await http().post(`/post`, form)
+        const { data: { status, post, error } } = await http.post(`/post`, form)
         if (status === 'success' && post) {
           commit('setPost', post)
         } else if (error) {
@@ -50,7 +50,7 @@ export default {
     async update({ commit }, { id, form }) {
       try {
         commit('startFetching')
-        const { data: { status, post, error } } = await http().put(`/post/${id}`, form)
+        const { data: { status, post, error } } = await http.put(`/post/${id}`, form)
         if (status === 'success' && post) {
           commit('setPost', post)
         } else if (error) {
